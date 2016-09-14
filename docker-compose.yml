@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+  subversion:
+    build: subversion
+    ports:
+      - "8080:80"
+    networks:
+      - subversion_net
+    volumes:
+      - /opt/docker/subversion/volumes/subversion/opt/svn:/opt/svn
+      - /etc/localtime:/etc/localtime:ro
+networks:
+  subversion_net:
+    driver: bridge
