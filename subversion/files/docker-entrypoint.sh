@@ -2,7 +2,7 @@
 
 set -e
 
-for REPO in $(echo -n ${REPOS} | sed 's/:/ /')
+for REPO in $(echo -n ${REPOS} | sed 's/:/ /g')
 do
     if [ ! -f "/opt/svn/${REPO}repo/README.txt" ] && [ `cat "/opt/svn/${REPO}repo/README.txt" | grep "This is a Subversion repository" | wc -l` -ne 1 ]; then
         echo "generate ${REPO}repo."
