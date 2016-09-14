@@ -10,6 +10,8 @@ services:
     volumes:
       - /opt/docker/subversion/volumes/subversion/opt/svn:/opt/svn
       - /etc/localtime:/etc/localtime:ro
+    environment:
+      - REPOS=sample
 networks:
   subversion_net:
     driver: bridge
