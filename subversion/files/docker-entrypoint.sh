@@ -2,13 +2,25 @@
 
 set -e
 
-if [ ! -e /opt/svn/samplerepo/format ]; then
-    svnadmin create --fs-type fsfs /opt/svn/samplerepo
-    chown -R apache:apache /opt/svn
-fi
+for REPO in $(echo -n ${REPOS} | sed 's/:/ /')
+do
+    if [ ! -f "/opt/svn/${REPO}repo/README.txt" ] && [ `cat "/opt/svn/${REPO}repo/README.txt" | grep "This is a Subversion repository" | wc -l` -ne 1 ]; then
+        echo "generate ${REPO}repo."
+        svnadmin create --fs-type fsfs /opt/svn/${REPO}repo
+        chown -R apache:apache /opt/svn
+    fi
+done
 
-if [ ! -d /opt/svn/samplerepo/settings ]; then
+if [ ! -f "/opt/svn/settings/authz" ]; then
+    echo "generate authz file."
     mkdir -p /opt/svn/settings
+    cat <<EOF > /opt/svn/settings/authz
+[groups]
+member =
+
+[/]
+* = rw
+EOF
 fi
 
 exec /usr/sbin/httpd -D FOREGROUND

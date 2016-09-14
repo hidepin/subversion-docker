@@ -9,5 +9,6 @@ COPY files/10-subversion.conf /etc/httpd/conf.modules.d
 COPY files/docker-entrypoint.sh /
 
 ENV LANG=C
+ENV REPOS=sample
 
 CMD ["/docker-entrypoint.sh"]
