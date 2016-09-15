@@ -32,8 +32,10 @@ subversion-docker
 
 4. ユーザを作成する
 
+   新規htpasswd作成時のみ **-c** をつける
+   
     ```
-    docker exec -it subversiondocker_subversion_1 htpasswd -c /opt/svn/settings/htpasswd (ユーザ名)
+    docker exec -it subversiondocker_subversion_1 htpasswd [-c] /opt/svn/settings/htpasswd (ユーザ名)
     ```
 
 5. (Optional)アクセス制御をかける
