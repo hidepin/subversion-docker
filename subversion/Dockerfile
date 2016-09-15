@@ -3,7 +3,8 @@ MAINTAINER Hidetoshi Imai <hidepin@gmail.com>
 
 RUN yum install -y \
                 subversion \
-                mod_dav_svn
+                mod_dav_svn \
+                wget
 
 COPY files/10-subversion.conf /etc/httpd/conf.modules.d
 COPY files/docker-entrypoint.sh /
