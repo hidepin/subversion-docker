@@ -69,6 +69,29 @@ def check_size(repos, txn, force_flg):
         sys.stderr.write("Sorry, you are trying to commit %d bytes, which is larger than the limit of MAX_BYTES(%d).\n" % (size, MAX_BYTES))
         sys.exit(1)
 
+def check_file_name(repos, txn, force_flg, date_flg):
+    cmd = SVNLOOK + " changed -t " + txn + " " + repos
+    output = subprocess.check_output(cmd, shell=True)
+
+    for data in output.split('\n'):
+        if data == '':
+            continue
+
+        (status, file) = data.split()
+
+        if status == 'D' or re.search('/$', file) :
+            continue
+
+        if not force_flg and re.search(NOT_ALLOW_EXTENTION, file):
+            sys.stderr.write("Sorry, you are trying to commit, but not allow extention(%s).\n" % (NOT_ALLOW_EXTENTION))
+            sys.exit(1)
+        elif not force_flg and re.search(NOT_ALLOW_REVFILE, file):
+            sys.stderr.write("Sorry, you are trying to commit, but not allow revname(%s).\n" % (NOT_ALLOW_REVFILE))
+            sys.exit(1)
+        elif not force_flg and not date_flg and re.search(NOT_ALLOW_DATEFILE, file):
+            sys.stderr.write("Sorry, you are trying to commit, but not allow datename(%s).\n" % (NOT_ALLOW_DATEFILE))
+            sys.exit(1)
+
 if __name__ == "__main__":
 
     force_flg = False
@@ -87,4 +110,6 @@ if __name__ == "__main__":
 
     check_size(repos, txn, force_flg)
 
-    sys.exit(1)
+    check_file_name(repos, txn, force_flg, date_flg)
+
+    sys.exit(0)
