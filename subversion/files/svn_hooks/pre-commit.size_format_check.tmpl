@@ -27,10 +27,10 @@ NOT_ALLOW_DATEFILE = r'[0-9]{4}'
 
 SVNLOOK = '/usr/bin/svnlook'
 
-def printUsage():
+def print_usage():
     sys.stderr.write('Usage: %s "$REPOS" "$TXN" ' % sys.argv[0])
 
-def checkCommitMsg(repos, txn, keyword):
+def check_commit_msg(repos, txn, keyword):
     cmd = SVNLOOK + " info -t " + txn + " " + repos
     output = subprocess.check_output(cmd, shell=True)
     result = re.search(keyword, unicode(output))
@@ -40,7 +40,7 @@ def checkCommitMsg(repos, txn, keyword):
     else:
         return False
 
-def getTransactionSize(repos, txn):
+def get_commit_size(repos, txn):
     cmd = SVNLOOK + " changed -t " + txn + " " + repos
     output = subprocess.check_output(cmd, shell=True)
     total_size = 0
@@ -59,9 +59,8 @@ def getTransactionSize(repos, txn):
 
     return total_size
 
-
-def checkTransactionSize(repos, txn, force_flg):
-    size = getTransactionSize(repos, txn)
+def check_size(repos, txn, force_flg):
+    size = get_commit_size(repos, txn)
 
     if size > THRESHOLD_BYTES and not force_flg:
         sys.stderr.write("Sorry, you are trying to commit %d bytes, which is larger than the limit of THRESHOLD_BYTES(%d).\n" % (size, THRESHOLD_BYTES))
@@ -77,15 +76,15 @@ if __name__ == "__main__":
     not_allow_flg = False
 
     if len(sys.argv) != 3:
-        printUsage()
+        print_usage()
         sys.exit(1)
     else:
         repos = sys.argv[1]
         txn = sys.argv[2]
 
-    force_flg = checkCommitMsg(repos, txn, FORCE_COMMIT_KEY)
-    date_flg = checkCommitMsg(repos, txn, DATE_COMMIT_KEY)
+    force_flg = check_commit_msg(repos, txn, FORCE_COMMIT_KEY)
+    date_flg = check_commit_msg(repos, txn, DATE_COMMIT_KEY)
 
-    checkTransactionSize(repos, txn, force_flg)
+    check_size(repos, txn, force_flg)
 
     sys.exit(1)
