@@ -8,6 +8,7 @@ RUN yum install -y \
 
 COPY files/10-subversion.conf /etc/httpd/conf.modules.d
 COPY files/docker-entrypoint.sh /
+COPY files/svn_hooks /svn_hooks
 
 ENV LANG=C
 ENV REPOS=sample

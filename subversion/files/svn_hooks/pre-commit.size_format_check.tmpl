@@ -1,0 +1,91 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+import sys
+import subprocess
+import re
+
+# 強制commit用のキーワード (THRESHOLD_BYTESを超えた場合もcommit可能とする)
+FORCE_COMMIT_KEY = r'(^| |\t|\n)force($| |\t|\n)'
+# 強制commit用のキーワード (日付がファイル名に含まれていた場合もcommit可能とする)
+DATE_COMMIT_KEY = r'(^| |\t|\n)date($| |\t|\n)'
+# maximum commit size (10MB)
+# このサイズを超えてcommitすることはできない。
+MAX_BYTES = 10485760
+# normal commit size (2MB)
+# DATE_COMMIT_KEYを指定した場合に、このサイズを超えてcommit可能
+THRESHOLD_BYTES = 2097152
+# commitを許可しないファイル拡張子
+# FORCE_COMMIT_KEYを指定した場合に、拡張子を無視して登録可能
+NOT_ALLOW_EXTENTION = r'(\.zip$|\.rar$|\.lzh$|\.jar$|\.exe$|\.tar$|\.xz$|\.7z$|\.atc$|\.bz2$|\.gz$|\.img$|\.iso$|\.rpm$|\.deb)'
+# r数字によるリビジョンファイルをcommit許可しない
+# FORCE_COMMIT_KEYを指定した場合に、この条件を無視して登録可能
+NOT_ALLOW_REVFILE = r'r[0-9]+\.'
+# 4桁以上の数字が含まれているファイルは日付入りとしてcommitを許可しない
+# DATE_COMMIT_KEYを指定した場合に、この条件を無視して登録可能
+NOT_ALLOW_DATEFILE = r'[0-9]{4}'
+
+SVNLOOK = '/usr/bin/svnlook'
+
+def printUsage():
+    sys.stderr.write('Usage: %s "$REPOS" "$TXN" ' % sys.argv[0])
+
+def checkCommitMsg(repos, txn, keyword):
+    cmd = SVNLOOK + " info -t " + txn + " " + repos
+    output = subprocess.check_output(cmd, shell=True)
+    result = re.search(keyword, unicode(output))
+
+    if result:
+        return True
+    else:
+        return False
+
+def getTransactionSize(repos, txn):
+    cmd = SVNLOOK + " changed -t " + txn + " " + repos
+    output = subprocess.check_output(cmd, shell=True)
+    total_size = 0
+
+    for data in output.split('\n'):
+        if data == '':
+            continue
+
+        (status, file) = data.split()
+
+        if status == 'D' or re.search('/$', file) :
+            continue
+
+        cmd = SVNLOOK + " filesize -t " + txn + " " + repos + " " + file
+        total_size += int(subprocess.check_output(cmd, shell=True))
+
+    return total_size
+
+
+def checkTransactionSize(repos, txn, force_flg):
+    size = getTransactionSize(repos, txn)
+
+    if size > THRESHOLD_BYTES and not force_flg:
+        sys.stderr.write("Sorry, you are trying to commit %d bytes, which is larger than the limit of THRESHOLD_BYTES(%d).\n" % (size, THRESHOLD_BYTES))
+        sys.exit(1)
+    elif size > MAX_BYTES:
+        sys.stderr.write("Sorry, you are trying to commit %d bytes, which is larger than the limit of MAX_BYTES(%d).\n" % (size, MAX_BYTES))
+        sys.exit(1)
+
+if __name__ == "__main__":
+
+    force_flg = False
+    date_flg = False
+    not_allow_flg = False
+
+    if len(sys.argv) != 3:
+        printUsage()
+        sys.exit(1)
+    else:
+        repos = sys.argv[1]
+        txn = sys.argv[2]
+
+    force_flg = checkCommitMsg(repos, txn, FORCE_COMMIT_KEY)
+    date_flg = checkCommitMsg(repos, txn, DATE_COMMIT_KEY)
+
+    checkTransactionSize(repos, txn, force_flg)
+
+    sys.exit(1)

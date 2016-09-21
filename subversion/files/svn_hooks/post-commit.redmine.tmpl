@@ -1,0 +1,5 @@
+#!/bin/sh
+
+REPOS="$1"
+REV="$2"
+/usr/bin/wget -q -O /dev/null http://(redmine server):port/sys/fetch_changesets?key=(api key)

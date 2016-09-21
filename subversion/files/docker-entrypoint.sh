@@ -12,6 +12,7 @@ do
                             file:///opt/svn/${REPO}repo/${REPO}app/branches \
                             file:///opt/svn/${REPO}repo/${REPO}app/tags \
                             -m "initial create dir hier."
+        cp /svn_hooks/* /opt/svn/${REPO}repo/hooks
         chown -R apache:apache /opt/svn
     fi
 done
