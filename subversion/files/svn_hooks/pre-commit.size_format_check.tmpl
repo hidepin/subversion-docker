@@ -31,9 +31,8 @@ def print_usage():
     sys.stderr.write('Usage: %s "$REPOS" "$TXN" ' % sys.argv[0])
 
 def check_commit_msg(repos, txn, keyword):
-    cmd = SVNLOOK + " info -t " + txn + " " + repos
-    output = subprocess.check_output(cmd, shell=True)
-    result = re.search(keyword, unicode(output))
+    output = subprocess.check_output([SVNLOOK, 'info', '-t', txn, repos])
+    result = re.search(keyword, output)
 
     if result:
         return True
@@ -41,8 +40,7 @@ def check_commit_msg(repos, txn, keyword):
         return False
 
 def get_commit_size(repos, txn):
-    cmd = SVNLOOK + " changed -t " + txn + " " + repos
-    output = subprocess.check_output(cmd, shell=True)
+    output = subprocess.check_output(['env', 'LANG=ja_JP.UTF-8', SVNLOOK, 'changed', '-t', txn, repos]).decode('utf-8')
     total_size = 0
 
     for data in output.split('\n'):
@@ -54,8 +52,7 @@ def get_commit_size(repos, txn):
         if status == 'D' or re.search('/$', file) :
             continue
 
-        cmd = SVNLOOK + " filesize -t " + txn + " " + repos + " " + file
-        total_size += int(subprocess.check_output(cmd, shell=True))
+        total_size += int(subprocess.check_output(['env', 'LANG=ja_JP.UTF-8', SVNLOOK, 'filesize', '-t', txn, repos, file.encode('utf-8')]))
 
     return total_size
 
@@ -70,8 +67,7 @@ def check_size(repos, txn, force_flg):
         sys.exit(1)
 
 def check_file_name(repos, txn, force_flg, date_flg):
-    cmd = SVNLOOK + " changed -t " + txn + " " + repos
-    output = subprocess.check_output(cmd, shell=True)
+    output = subprocess.check_output([SVNLOOK, 'changed', '-t', txn, repos]).decode('utf-8')
 
     for data in output.split('\n'):
         if data == '':
