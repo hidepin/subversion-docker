@@ -29,4 +29,10 @@ member =
 EOF
 fi
 
+if [ ! -f "/opt/svn/settings/htpasswd" ]; then
+    echo "generate htpasswd file."
+    mkdir -p /opt/svn/settings
+    touch /opt/svn/settings/htpasswd
+fi
+
 exec /usr/sbin/httpd -D FOREGROUND
