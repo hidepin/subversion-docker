@@ -47,7 +47,7 @@ def get_commit_size(repos, txn):
         if data == '':
             continue
 
-        (status, file) = data.split()
+        (status, file) = data.split(None, 1)
 
         if status == 'D' or re.search('/$', file) :
             continue
@@ -73,7 +73,7 @@ def check_file_name(repos, txn, force_flg, date_flg):
         if data == '':
             continue
 
-        (status, file) = data.split()
+        (status, file) = data.split(None, 1)
 
         if status == 'D' or re.search('/$', file) :
             continue
