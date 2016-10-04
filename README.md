@@ -43,6 +43,31 @@ subversion-docker
     vi /opt/docker/subversion/volumes/subversion/opt/svn/settings/authz
     ```
 
+systemdによる自動起動設定
+============================================================
+host OSにsystemdの自動起動設定を行う
+(ansibleのdocker imageが必要)
+
+1. host OSにログインする
+
+2. subversion_systemd/subversion_systemd.ymlのservice_groupを設定する
+
+  ``` shell
+  vi subversion_systemd/subversion_systemd.yml
+  ```
+
+  下記設定を編集する。
+
+  ```
+  service_group: sample.
+  ```
+
+2. dockerからansibleの設定を行う
+
+  ``` shell
+  docker run -it -v $(pwd)/subversion_systemd:/opt/ansible/ansible/subversion_systemd --rm=true ansible/centos7-ansible ansible-playbook -i "(host OSのIPアドレス)," -k subversion_systemd/subversion_systemd.yml
+  ```
+
 (Optional) コミット時のチェック
 ============================================================
 
