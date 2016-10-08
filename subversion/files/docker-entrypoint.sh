@@ -35,4 +35,10 @@ if [ ! -f "/opt/svn/settings/htpasswd" ]; then
     touch /opt/svn/settings/htpasswd
 fi
 
+if [ ! -f "/opt/svn/settings/htpasswd.lock" ]; then
+    echo "generate htpasswd lock file."
+    mkdir -p /opt/svn/settings
+    touch /opt/svn/settings/htpasswd.lock
+fi
+
 exec /usr/sbin/httpd -D FOREGROUND
