@@ -68,6 +68,18 @@ host OSにsystemdの自動起動設定を行う
   docker run -it -v $(pwd)/subversion_systemd:/opt/ansible/ansible/subversion_systemd --rm=true ansible/centos7-ansible ansible-playbook -i "(host OSのIPアドレス)," -k subversion_systemd/subversion_systemd.yml
   ```
 
+svnユーザの作成、パスワード変更方法
+============================================================
+
+ユーザの新規追加、パスワードの変更が可能となる。
+ユーザ削除はできない。
+
+1. ブラウザから下記URLにアクセスし使用する
+
+   ```
+   http://(svnホストアドレス):(svn:ポート番号)/cgi-bin/usernamager.cgi
+   ```
+
 (Optional) コミット時のチェック
 ============================================================
 
