@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+import os
 import sys
 import subprocess
 import re
@@ -71,13 +72,13 @@ def check_file_name(repos, txn, force_flg, date_flg):
         if status == 'D' or re.search('/$', file) :
             continue
 
-        if not force_flg and re.search(NOT_ALLOW_EXTENTION, file):
+        if not force_flg and re.search(NOT_ALLOW_EXTENTION, os.path.basename(file)):
             sys.stderr.write("Sorry, you are trying to commit, but not allow extention(%s).\n" % (NOT_ALLOW_EXTENTION))
             sys.exit(1)
-        elif not force_flg and re.search(NOT_ALLOW_REVFILE, file):
+        elif not force_flg and re.search(NOT_ALLOW_REVFILE, os.path.basename(file)):
             sys.stderr.write("Sorry, you are trying to commit, but not allow revname(%s).\n" % (NOT_ALLOW_REVFILE))
             sys.exit(1)
-        elif not force_flg and not date_flg and re.search(NOT_ALLOW_DATEFILE, file):
+        elif not force_flg and not date_flg and re.search(NOT_ALLOW_DATEFILE, os.path.basename(file)):
             sys.stderr.write("Sorry, you are trying to commit, but not allow datename(%s).\n" % (NOT_ALLOW_DATEFILE))
             sys.exit(1)
 
