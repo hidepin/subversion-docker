@@ -1,12 +1,14 @@
 [Unit]
 Description=APP Container for Subversion
-After=docker.service
 Requires=docker.service
+After=docker.service
 
 [Service]
+Type=simple
 TimeoutStartSec=0
-ExecStart=/usr/bin/docker start -a subversiondocker_app_1
-ExecStop=/usr/bin/docker stop subversiondocker_app_1
+ExecStart=/usr/local/bin/docker-compose up
+ExecStop=/usr/local/bin/docker-compose stop
+WorkingDirectory=/opt/docker/subversion/subversion-docker
 Environment="DOCKER_HOST=tcp://127.0.0.1:2376"
 
 [Install]
