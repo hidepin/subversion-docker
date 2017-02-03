@@ -2,21 +2,11 @@ version: '2'
 
 services:
   app:
-    build:
-      context: subversion
-      args:
-        http_proxy:
-        https_proxy:
+    build: subversion
     volumes:
       - /opt/docker/subversion/volumes/subversion/opt/svn:/opt/svn
       - /etc/localtime:/etc/localtime:ro
     ports:
       - "8080:80"
-    networks:
-      - subversion_net
     environment:
       - REPOS=sample
-
-networks:
-  subversion_net:
-    driver: bridge
