@@ -7,6 +7,6 @@ services:
       - /opt/docker/subversion/volumes/subversion/opt/svn:/opt/svn
       - /etc/localtime:/etc/localtime:ro
     ports:
-      - "8080:80"
+      - "80:80"
     environment:
       - REPOS=sample
