@@ -1,4 +1,4 @@
-FROM centos:7.2.1511
+FROM centos:centos7
 MAINTAINER Hidetoshi Imai <hidepin@gmail.com>
 
 RUN yum clean all && \
