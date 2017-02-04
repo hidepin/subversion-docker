@@ -1,5 +1,6 @@
 FROM centos:centos7
-MAINTAINER Hidetoshi Imai <hidepin@gmail.com>
+
+LABEL maintainer "Hidetoshi Imai <hidepin@gmail.com>"
 
 RUN yum clean all && \
     yum -y reinstall glibc-common && \
