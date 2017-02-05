@@ -1,16 +1,16 @@
 - hosts: all
 
   vars:
-    service: subversion.service
+    service: subversion
 
   tasks:
-    - name: set subversion systemd service
-      template: src="{{ service }}.j2" dest="/etc/systemd/system/{{ service }}"
-      notify: subversion restart
+    - name: "set {{ service }} systemd service"
+      template: src="service.j2" dest="/etc/systemd/system/{{ service }}.service"
+      notify: "service restart"
 
-    - name: enable subversion systemd service
+    - name: "enable {{ service }} systemd service"
       service: name="{{ service }}" enabled=yes state=started daemon_reload=yes
 
   handlers:
-    - name: subversion restart
-      service: name=subversion state=restarted
+    - name: "service restart"
+      service: name="{{ service }}" state=restarted
