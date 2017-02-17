@@ -6,6 +6,7 @@ services:
     volumes:
       - /opt/docker/subversion/volumes/subversion/opt/svn:/opt/svn
       - /etc/localtime:/etc/localtime:ro
+      - /etc/locale.conf:/etc/locale.conf:ro
     ports:
       - "80:80"
     environment:
