@@ -13,13 +13,13 @@
 
     - name: "enable {{ service }} systemd service"
       service:
-        name="{{ service }}"
-        enabled=yes
-        state=started
-        daemon_reload=yes
+        name: "{{ service }}"
+        enabled: yes
+        state: started
+        daemon_reload: yes
 
   handlers:
     - name: "service restart"
       service:
-        name="{{ service }}"
-        state=restarted
+        name: "{{ service }}"
+        state: restarted
