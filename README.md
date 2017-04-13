@@ -65,7 +65,7 @@ svnユーザの作成、パスワード変更方法
 1. ブラウザから下記URLにアクセスし使用する
 
    ```
-   http://(svnホストアドレス):(svn:ポート番号)/cgi-bin/usernamager.cgi
+   http://(svnホストアドレス):(svn:ポート番号)/cgi-bin/usermanager.cgi
    ```
 
 (Optional) コミット時のチェック
