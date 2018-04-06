@@ -11,7 +11,7 @@ subversion-docker
     version: '2'
 
     services:
-      subversion:
+      app:
         environment:
           - REPOS=sample
     ```
@@ -33,7 +33,7 @@ subversion-docker
 4. ユーザを作成する
 
     ```
-    docker exec -it subversiondocker_subversion_1 htpasswd /opt/svn/settings/htpasswd (ユーザ名)
+    docker exec -it subversiondocker_app htpasswd /opt/svn/settings/htpasswd (ユーザ名)
     ```
 
 5. (Optional)アクセス制御をかける
